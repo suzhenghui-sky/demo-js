@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    .container {
+      display: flex;
+      padding: 50px;
+    }
+
+    .container .left {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      border: 1px solid #ccc;
+      cursor: move;
+    }
+
+    .left>.move {
+      display: none;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 200px;
+      height: 200px;
+      background-color: yellow;
+      opacity: 0.4;
+    }
+
+    .left>img {
+      width: 100%;
+    }
+
+    .container .right {
+      position: relative;
+      display: none;
+      width: 500px;
+      height: 500px;
+      border: 1px solid #ccc;
+      overflow: hidden;
+      background-color: skyblue;
+    }
+
+    .right>img {
+      position: absolute;
+      left: 0;
+      top: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="left">
+      <img src="./img/iphone_small.jpg" alt="">
+      <p class="move"></p>
+    </div>
+    <div class="right">
+      <img class="right-img" src="./img/iphone_big.jpg" alt="">
+    </div>
+  </div>
+
+  <script>
+    // debugger  
+    "use strict";
+
+    /* 
+       1.在鼠标还没有放到左边框时，黄色盒子隐藏，右边的盒子也隐藏；
+       2.在鼠标放到左边的边框时，黄色盒子显示，右边的盒子也显示
+       需要用到的事件mouseover，mouseout
+ 
+       3.鼠标在左侧的边框移动时，黄色边框也要跟着移动
+    
+    */
+
+    const leftEle = document.querySelector('.left');
+    const moveEle = document.querySelector('.move');
+    const rightEle = document.querySelector('.right');
+    const rightImg = rightEle.firstElementChild;
+
+    magnifyingGlass({
+      leftEle,
+      moveEle,
+      rightEle,
+      rightImg
+    });
+
+    function magnifyingGlass({ leftEle, moveEle, rightEle, rightImg }) {
+      // 放大镜功能
+
+      // 鼠标移进
+      leftEle.addEventListener('mouseover', (ev) => {
+        moveEle.style.display = 'block';
+        rightEle.style.display = 'block';
+
+        const offsetLeft = ev.currentTarget.offsetLeft;
+        const offsetTop = ev.currentTarget.offsetTop;
+
+        const maxWidth = leftEle.offsetWidth - moveEle.offsetWidth; // 获取左侧盒子和黄色黄色之间的宽度差，作为可以x轴的移动最大值
+        const maxHeight = leftEle.offsetHeight - moveEle.offsetHeight;
+
+        let left = 0;
+        let top = 0;
+
+        ev.target.addEventListener('mousemove', (ev) => {
+          left = ev.clientX - (moveEle.offsetWidth / 2) - offsetLeft; // 黄色遮罩层X轴可以移动数值
+          top = ev.clientY - (moveEle.offsetHeight / 2) - offsetTop;
+
+          // 下面的if 语句是用来设置移动范围的，不允许超过
+          if (left <= 0) {
+            left = 0;
+          }
+
+          if (left >= maxWidth) {
+            left = maxWidth;
+          }
+
+          if (top <= 0) {
+            top = 0;
+          }
+
+          if (top >= maxHeight) {
+            top = maxHeight;
+          }
+
+          moveEle.style.left = `${left}px`;
+          moveEle.style.top = `${top}px`;
+
+          // 右侧图片移动比例距离计算，rightImg.offsetWidth - rightEle.offsetWidth 这条式子是计算右侧盒子和图片的大小差距，那个差值作为移动的最大值
+          rightImg.style.left = `-${(rightImg.offsetWidth - rightEle.offsetWidth) * left / maxWidth}px`;
+          rightImg.style.top = `-${(rightImg.offsetHeight - rightEle.offsetHeight) * top / maxHeight}px`;
+
+        });
+
+      });
+
+       // 鼠标移出
+      leftEle.addEventListener('mouseout', (ev) => {
+        moveEle.style.display = 'none';
+        rightEle.style.display = 'none';
+      });
+
+    }
+
+
+  </script>
+</body>
+
+</html>

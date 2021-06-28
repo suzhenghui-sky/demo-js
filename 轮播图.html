@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="./css/myStyle.css">
+  <title>Document</title>
+
+  <style>
+    #body {
+      padding: 50px;
+    }
+
+    .container {
+      position: relative;
+      width: 600px;
+      height: 225px;
+      border: 1px solid #ccc;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .container img {
+      height: 100%;
+      width: 600px;
+    }
+
+    .container>.carousel {
+      position: absolute;
+      height: 100%;
+      display: flex;
+    }
+
+    .container>.carousel>li {
+      height: 100%;
+      flex: 0 0 auto;
+    }
+
+    .container>.arrows {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-color: black;
+      opacity: 0.4;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 24px;
+      color: white;
+      text-align: center;
+      line-height: 50px;
+      z-index: 1;
+    }
+
+    .container>.left {
+      left: 0;
+    }
+
+    .container>.right {
+      right: 0;
+
+    }
+
+    .container>.dot {
+      position: absolute;
+      display: flex;
+      bottom: 10%;
+      left: 50%;
+      border-radius: 10px;
+      opacity: 0.2;
+    }
+
+    .dot>li {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: black;
+      opacity: 0.6;
+      margin: 0 5px;
+      cursor: pointer;
+    }
+
+    .dot>li.current {
+      background-color: black;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="body">
+    <div class="container">
+      <a href="javascript:;" class="arrows left">←</a>
+      <a href="javascript:;" class="arrows right">→</a>
+      <ul class="carousel">
+      </ul>
+      <ol class="dot">
+      </ol>
+    </div>
+  </div>
+
+  <script src="./js/demo.js"></script>
+  <script src="./js/animate.js"></script>
+  <script>
+    // debugger  
+    "use strict";
+
+    const imgArr = [
+      {
+        src: './img/1.jpg',
+      },
+      {
+        src: './img/2.jpg',
+      },
+      {
+        src: './img/3.jpg',
+      },
+    ];
+
+    /* 
+      1.获取ul对象，作为存放图片的容器
+        1.创建li, a, img节点
+    */
+
+    const carouselUl = querySelector('.carousel');
+    const arrows_le = querySelector('.container>.left');
+    const arrows_ri = querySelector('.container>.right');
+    const dotOl = querySelector('.dot');
+    const offsetWidth = carouselUl.parentNode.offsetWidth;
+    let imgCurrent = 0; // 记录总共有多少张图片
+    let index = 0;
+    let flag = true; // 节流阀 
+
+    imgArr.forEach((item, index) => {
+      const li = createEle('li');
+      const a = createEle('a');
+      const img = new Image();
+      img.src = item.src;
+
+      dotOl.appendChild(li.cloneNode());
+      a.appendChild(img);
+      li.appendChild(a);
+      carouselUl.appendChild(li);
+      imgCurrent++;
+
+    });
+
+    carouselUl.appendChild(carouselUl.firstElementChild.cloneNode(true)); // 克隆一个作为障眼法
+    carouselUl.style.width = offsetWidth * (imgCurrent + 1) + 'px'; // 获取ul的宽度
+
+    arrows_ri.addEventListener('click', (ev) => {
+
+
+      if (flag) {
+        flag = false;
+
+        if (index === imgCurrent) {
+          index = 0;
+          carouselUl.style.left = `-${offsetWidth * index}px`;
+        }
+
+        index++;
+        animateFirst(carouselUl, -offsetWidth * index, function () {
+          flag = true;
+        });
+      }
+
+
+    });
+
+    arrows_le.addEventListener('click', (ev) => {
+
+      if (flag) {
+        flag = false;
+
+        if (index === 0) {
+          index = imgCurrent
+          carouselUl.style.left = `-${offsetWidth * index}px`;
+        }
+
+        index--;
+
+        animateFirst(carouselUl, -offsetWidth * index, function () {
+          flag = true;
+        });
+      }
+
+    });
+
+
+
+  </script>
+</body>
+
+</html>

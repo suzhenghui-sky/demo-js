@@ -1,0 +1,85 @@
+body,
+p,
+ol,
+ul,
+li,
+h1,
+i,
+h2,
+h3,
+h4,
+h5,
+dl,
+dt,
+dd,
+em,
+input,
+form,
+select,
+button {
+    margin: 0;
+    padding: 0;
+    /* font: inherit; inherit: 规定应该从父元素继承字体系列 */
+}
+
+body {
+    font: 12px/1.5 "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", "Hiragino Sans GB", "Heiti SC", "WenQuanYi Micro Hei", sans-serif;
+    /*简写，至少要有字体大小和字体类型*/
+}
+
+img {
+    vertical-align: top;
+    border: 0;
+}
+
+strong {
+    font-weight: 400;
+    /* 加粗显示,400表示不加粗*/
+}
+
+em,
+i {
+    font-family: "icomoon";
+    font-style: normal;
+    /*斜体显示 */
+}
+
+del {
+    text-decoration: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+ul,
+ol {
+    list-style-type: none;
+}
+
+.clearfix::before,
+.clearfix::after {
+    content: "";
+    display: table;
+}
+
+.clearfix::after {
+    clear: both;
+}
+
+
+/* .clearfix {
+  *zoom: 1; 用于IE7以下清除浮动
+} */
+
+.float_l {
+    float: left;
+}
+
+.float_r {
+    float: right;
+}
+
+.l-margin-r {
+    margin: 0 10px;
+}
